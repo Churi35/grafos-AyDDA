@@ -1,6 +1,7 @@
 from Arista import Arista
 from Nodo import Nodo
 from Grafo import Grafo
+import random
 
 import math
 import random
@@ -38,22 +39,24 @@ class Algoritmos():
         nodo_actual = i * m + j
         str_nodo_actual = str(nodo_actual)
 
+        peso_random = random.randint(1,10)
+
         if j < n - 1:
           proximo_nodo = nodo_actual + 1
-          grafo.agregar_arista(str_nodo_actual + " - " + str(proximo_nodo), str_nodo_actual, str(proximo_nodo))
+          grafo.agregar_arista(str_nodo_actual + " - " + str(proximo_nodo), str_nodo_actual, str(proximo_nodo),peso=peso_random)
         
         if i < m - 1:
           proximo_nodo = nodo_actual + m
-          grafo.agregar_arista(str_nodo_actual + " - " + str(proximo_nodo), str_nodo_actual, str(proximo_nodo))
+          grafo.agregar_arista(str_nodo_actual + " - " + str(proximo_nodo), str_nodo_actual, str(proximo_nodo),peso=peso_random)
 
         if diagonal:
           if j < n - 1 and i < m - 1:
             proximo_nodo = nodo_actual + m + 1
-            grafo.agregar_arista(str_nodo_actual + " - " + str(proximo_nodo), str_nodo_actual, str(proximo_nodo))
+            grafo.agregar_arista(str_nodo_actual + " - " + str(proximo_nodo), str_nodo_actual, str(proximo_nodo),peso=peso_random)
           
           if j - 1 >= 0 and i < m - 1:
             proximo_nodo = nodo_actual + m - 1
-            grafo.agregar_arista(str_nodo_actual + " - " + str(proximo_nodo), str_nodo_actual, str(proximo_nodo))
+            grafo.agregar_arista(str_nodo_actual + " - " + str(proximo_nodo), str_nodo_actual, str(proximo_nodo),peso=peso_random)
 
     return grafo
 
@@ -76,7 +79,8 @@ class Algoritmos():
       nodo_destino = str(random.randint(0, n - 1))
 
       if nodo_origen != nodo_destino:
-        grafo.agregar_arista(nodo_origen + " - " + nodo_destino, nodo_origen, nodo_destino)
+        peso_random = random.randint(1,10)
+        grafo.agregar_arista(nodo_origen + " - " + nodo_destino, nodo_origen, nodo_destino,peso=peso_random)
 
     return grafo
 
@@ -98,7 +102,8 @@ class Algoritmos():
       for j in range(n):
         if random.random() < p:
           if i != j:
-            grafo.agregar_arista(str(i) + " - " + str(j), str(i), str(j))
+            peso_random = random.randint(1,10)
+            grafo.agregar_arista(str(i) + " - " + str(j), str(i), str(j),peso=peso_random)
 
     return grafo
 
@@ -127,7 +132,8 @@ class Algoritmos():
             distancia = math.sqrt((x1 - x2)**2 + (y1 - y2)**2)
 
             if distancia <= r:
-              grafo.agregar_arista(str(i) + " - " + str(j), str(i), str(j))
+              peso_random = random.randint(1,10)
+              grafo.agregar_arista(str(i) + " - " + str(j), str(i), str(j),peso=peso_random)
 
       return grafo
 
@@ -162,7 +168,8 @@ class Algoritmos():
 
           if random.random() < probabilidad:
             if arreglo_aleatorio[j] != i:
-              grafo.agregar_arista(str(i) + " - " + str(arreglo_aleatorio[j]), str(i), str(arreglo_aleatorio[j]))
+              peso_random = random.randint(1,10)
+              grafo.agregar_arista(str(i) + " - " + str(arreglo_aleatorio[j]), str(i), str(arreglo_aleatorio[j]),peso=peso_random)
 
     return grafo
 
@@ -189,7 +196,12 @@ class Algoritmos():
 
       arista_elegida = list(grafo.Aristas.values())[arreglo_aleatorio[0]]
 
-      grafo.agregar_arista(str(i) + " - " + str(arista_elegida.Nodo_origen), str(i), str(arista_elegida.Nodo_origen))
-      grafo.agregar_arista(str(i) + " - " + str(arista_elegida.Nodo_destino), str(i), str(arista_elegida.Nodo_destino))
+      peso_random = random.randint(1,10)
+
+      grafo.agregar_arista(str(i) + " - " + str(arista_elegida.Nodo_origen), str(i), str(arista_elegida.Nodo_origen),peso=peso_random)
+
+      peso_random = random.randint(1,10)
+
+      grafo.agregar_arista(str(i) + " - " + str(arista_elegida.Nodo_destino), str(i), str(arista_elegida.Nodo_destino),peso=peso_random)
 
     return grafo
