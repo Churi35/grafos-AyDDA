@@ -30,6 +30,9 @@ class Grafo():
 
         self.Aristas[nombre] = Arista(nodo_origen,nodo_destino,nombre,peso=peso)
 
+    def eliminar_arista(self,nombre):
+        self.Aristas.pop(nombre)
+
 
     def getGrado(self,nodo):
       grado = 0
@@ -81,7 +84,7 @@ class Grafo():
         nodos_descubiertos = {}
 
         if(self.Nodos.values == None or not self.Nodos.get(s)):
-            return None
+            return Grafo()
         
         grafo_bfs.agregar_nodo(s)
         nodos_descubiertos[s] = s
@@ -164,7 +167,7 @@ class Grafo():
                 pila.pop()
 
     
-    def DFS(self, s, modo):
+    def DFS(self, s, modo=True):
 
         grafo_dfs = Grafo()
         nodos_descubiertos = {}
@@ -253,7 +256,74 @@ class Grafo():
 
         return grafo_dijkstra
         
+    def KruskalD(self):
+        Grafo_Kruskal = Grafo()
 
+        aristas_restantes = [arista for arista in self.Aristas.values()]
+
+        aristas_restantes.sort(key=lambda arista: arista.attributos['peso'],reverse=True)
+
+        while len(aristas_restantes) > 0:
+            arista = aristas_restantes.pop()           
+
+            Grafo_BFS = Grafo_Kruskal.BFS(arista.Nodo_origen)
+
+            if Grafo_BFS.Nodos.get(arista.Nodo_destino) is None:
+                Grafo_Kruskal.agregar_arista(str(arista.Nodo_origen) + " - " + str(arista.Nodo_destino), arista.Nodo_origen,arista.Nodo_destino,arista.attributos.get("peso"))
+
+        return Grafo_Kruskal
+    
+    def KruskalI(self):
+        Grafo_Kruskal = Grafo()
+        Grafo_Kruskal.Nodos = self.Nodos.copy()
+        Grafo_Kruskal.Aristas = self.Aristas.copy()
+        cantidad_de_nodos = len(Grafo_Kruskal.Nodos)
+        
+        aristas_restantes = [arista for arista in self.Aristas.values()]
+
+        aristas_restantes.sort(key=lambda arista: arista.attributos['peso'],reverse=False)
+
+        while len(aristas_restantes) > 0:
+
+            arista = aristas_restantes.pop()
+
+            Grafo_Kruskal.eliminar_arista(arista.etiqueta)
+            if cantidad_de_nodos != len(Grafo_Kruskal.DFS(arista.Nodo_destino).Nodos):
+                Grafo_Kruskal.agregar_arista(arista.etiqueta,arista.Nodo_origen,arista.Nodo_destino,arista.attributos["peso"])
+
+        return Grafo_Kruskal
+        
+    def Prim(self,s):
+        Grafo_Prim = Grafo()
+
+        nodos_descubiertos = {}
+        nodos_descubiertos[s] = s
+
+        aristas_por_descubrir = [arista for arista in self.Aristas.values() if arista.Nodo_origen == s or arista.Nodo_destino == s]
+
+        while len(aristas_por_descubrir) > 0:
+
+            aristas_por_descubrir.sort(key=lambda arista: arista.attributos['peso'],reverse=True)
+            arista = aristas_por_descubrir.pop()
+
+            if nodos_descubiertos.get(arista.Nodo_origen) is None or nodos_descubiertos.get(arista.Nodo_destino) is None:
+                nodos_descubiertos[arista.Nodo_origen] = arista.Nodo_origen
+                nodos_descubiertos[arista.Nodo_destino] = arista.Nodo_destino
+
+                Grafo_Prim.agregar_arista(arista.etiqueta, arista.Nodo_origen,arista.Nodo_destino,arista.attributos["peso"])
+
+                lista_1 = [arista_p for arista_p in self.Aristas.values() if arista_p.Nodo_origen == arista.Nodo_origen or arista_p.Nodo_destino == arista.Nodo_origen]
+                lista_2 = [arista_p for arista_p in self.Aristas.values() if arista_p.Nodo_origen == arista.Nodo_destino or arista_p.Nodo_destino == arista.Nodo_destino]
+                
+                for arista in lista_1 + lista_2:
+                    if not any(x.etiqueta == arista.etiqueta for x in aristas_por_descubrir):
+                        aristas_por_descubrir.append(arista)
+
+        return Grafo_Prim
+
+
+
+            
 
             
                 
